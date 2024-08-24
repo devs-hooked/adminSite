@@ -1,56 +1,13 @@
-"use client"
-
-import { useState } from 'react';
-import { supabase } from '../util/supabaseClient';
+import ApproveWaitlist from '../app/components/ApproveWaitlist';
+import AddToWaitlist from '../app/components/AddtoWaitlist'
 
 const HomePage: React.FC = () => {
-  const [startingId, setStartingId] = useState<number | null>(null);
-  const [endingId, setEndingId] = useState<number | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  const handleApprove = async () => {
-    if (startingId === null || endingId === null) {
-      alert('Please enter both starting and ending IDs');
-      return;
-    }
-
-    setLoading(true);
-
-    // Update the Approved column for IDs within the range
-    const { error } = await supabase
-      .from('Waitlist')
-      .update({ Approved: true })
-      .gte('ID', startingId)
-      .lte('ID', endingId);
-
-    setLoading(false);
-
-    if (error) {
-      console.error(error);
-      alert('An error occurred while updating the records');
-    } else {
-      alert('Records successfully updated');
-    }
-  };
-
   return (
-    <div>
-      <h1>Approve Waitlist IDs</h1>
-      <input
-        type="number"
-        placeholder="Starting ID"
-        value={startingId ?? ''}
-        onChange={(e) => setStartingId(Number(e.target.value))}
-      />
-      <input
-        type="number"
-        placeholder="Ending ID"
-        value={endingId ?? ''}
-        onChange={(e) => setEndingId(Number(e.target.value))}
-      />
-      <button onClick={handleApprove} disabled={loading}>
-        {loading ? 'Approving...' : 'Approve'}
-      </button>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+      <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+        <ApproveWaitlist />
+        <AddToWaitlist />
+      </div>
     </div>
   );
 };
